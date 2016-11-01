@@ -11,7 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hyphenate.chatuidemo;
+package cn.ucai.superwechat;
 
 import android.app.Application;
 import android.content.Context;
@@ -19,10 +19,10 @@ import android.support.multidex.MultiDex;
 
 import com.easemob.redpacketsdk.RedPacket;
 
-public class DemoApplication extends Application {
+public class SuperWeChatApplication extends Application {
 
 	public static Context applicationContext;
-	private static DemoApplication instance;
+	private static SuperWeChatApplication instance;
 	// login user name
 	public final String PREF_USERNAME = "username";
 	
@@ -46,7 +46,7 @@ public class DemoApplication extends Application {
 		//end of red packet code
 	}
 
-	public static DemoApplication getInstance() {
+	public static SuperWeChatApplication getInstance() {
 		return instance;
 	}
 

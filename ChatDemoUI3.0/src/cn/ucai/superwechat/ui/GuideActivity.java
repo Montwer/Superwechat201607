@@ -21,7 +21,7 @@ public class GuideActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tton:
-                
+                MFGT.gotoLogin(this);
                 break;
             case R.id.ttons:
                 MFGT.gotoRegister(this);

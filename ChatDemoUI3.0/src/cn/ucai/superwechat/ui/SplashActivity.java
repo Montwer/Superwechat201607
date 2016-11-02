@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.hyphenate.chat.EMClient;
 
-import cn.ucai.superwechat.DemoHelper;
+import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.R;
 
 /**
@@ -28,7 +28,7 @@ public class SplashActivity extends BaseActivity {
 
 		new Thread(new Runnable() {
 			public void run() {
-				if (DemoHelper.getInstance().isLoggedIn()) {
+				if (SuperWeChatHelper.getInstance().isLoggedIn()) {
 					// auto login mode, make sure all group and conversation is loaed before enter the main screen
 					long start = System.currentTimeMillis();
 					EMClient.getInstance().groupManager().loadAllGroups();
@@ -43,7 +43,7 @@ public class SplashActivity extends BaseActivity {
 						}
 					}
 					//enter main screen
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));
+					startActivity(new Intent(SplashActivity.this, GuideActivity.class));
 					finish();
 				}else {
 					try {

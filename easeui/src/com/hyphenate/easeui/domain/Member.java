@@ -13,7 +13,7 @@ public class Member extends User {
 	public Member(String muserName, String muserNick, Integer mavatarId, String mavatarPath,
 				  Integer mavatarType, String mavatarLastUpdateTime, Integer mmemberId, Integer mmemberGroupId, String mmemberGroupHxid,
 				  Integer mmemberPermission) {
-		super(muserName, muserNick, mavatarId, mavatarPath, mavatarType, mavatarLastUpdateTime);
+//		super(muserName, muserNick, mavatarId, mavatarPath, mavatarType, mavatarLastUpdateTime);
 		this.mmemberId = mmemberId;
 		this.mmemberGroupId = mmemberGroupId;
 		this.mmemberGroupHxid = mmemberGroupHxid;

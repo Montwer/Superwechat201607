@@ -15,7 +15,7 @@ public class Locationner extends User {
 	public Locationner(String muserName, String muserNick, Integer mavatarId, String mavatarPath,
 					   Integer mavatarType, String mavatarLastUpdateTime, Integer mlocationId, Double mlocationLatitude, Double mlocationLongitude,
 					   Boolean mlocationIsSearched, String mlocationLastUpdateTime, Double distance) {
-		super(muserName, muserNick, mavatarId, mavatarPath, mavatarType, mavatarLastUpdateTime);
+//		super(muserName, muserNick, mavatarId, mavatarPath, mavatarType, mavatarLastUpdateTime);
 		this.mlocationId = mlocationId;
 		this.mlocationLatitude = mlocationLatitude;
 		this.mlocationLongitude = mlocationLongitude;

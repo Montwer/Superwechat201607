@@ -355,7 +355,7 @@ public class UserProfileActivity extends BaseActivity implements OnClickListener
 									CommonUtils.showShortToast(getString(R.string.toast_nick_not_modify));
 									return;
 								}
-								updateRemoteNick(nickString);
+
 							}
 						}).setNegativeButton(R.string.dl_cancel, null).show();
 				break;

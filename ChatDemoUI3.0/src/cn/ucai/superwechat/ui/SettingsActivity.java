@@ -1,4 +1,4 @@
-package cn.ucai.superwechat.utils;
+package cn.ucai.superwechat.ui;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -22,13 +22,8 @@ import com.hyphenate.util.EMLog;
 import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.SuperWeChatHelper;
 import cn.ucai.superwechat.SuperWeChatModel;
-import cn.ucai.superwechat.ui.BaseActivity;
-import cn.ucai.superwechat.ui.BlacklistActivity;
-import cn.ucai.superwechat.ui.DiagnoseActivity;
-import cn.ucai.superwechat.ui.LoginActivity;
-import cn.ucai.superwechat.ui.OfflinePushNickActivity;
-import cn.ucai.superwechat.ui.SetServersActivity;
-import cn.ucai.superwechat.ui.UserProfileActivity;
+import cn.ucai.superwechat.utils.ExitAppUtils;
+import cn.ucai.superwechat.utils.MFGT;
 
 /**
  * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
@@ -386,7 +381,7 @@ public class SettingsActivity extends BaseActivity implements OnClickListener {
                     public void run() {
                         pd.dismiss();
                         // show login screen
-//						ExitAppUtils.getInstance().exit();
+						ExitAppUtils.getInstance().exit();
                         finish();
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));

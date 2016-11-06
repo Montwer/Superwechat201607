@@ -82,16 +82,18 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
     // user logged into another device
     public boolean isConflict = false;
     @BindView(R.id.txt_left)
-    TextView txtLeft;
+    TextView mTxtLeft;
     @BindView(R.id.img_right)
-    ImageView imgRight;
+    ImageView mImgRight;
     @BindView(R.id.layout_viewpage)
-    MFViewPager layoutViewpage;
+    MFViewPager mLayoutViewpage;
     @BindView(R.id.layout_tabhost)
-    DMTabHost layoutTabhost;
+    DMTabHost mLayoutTabhost;
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
+
     MainTabAdpter adapter;
+
 
     /**
      * check if current user account was remove
@@ -105,16 +107,13 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         super.onCreate(savedInstanceState);
 
         savePower();
-        checkAccountlogin(savedInstanceState);
-        //make sure activity will not in background if user is logged into another device or removed
+        checkLogined(savedInstanceState);
 
         setContentView(R.layout.em_activity_main);
         ButterKnife.bind(this);
         // runtime permission for android 6.0, just require all permissions here for simple
         requestPermissions();
-
         initView();
-
         umeng();
 
         checkAccount();
@@ -131,7 +130,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //				.add(R.id.fragment_container, contactListFragment).hide(contactListFragment).show(conversationListFragment)
 //				.commit();
 
-        //register broadcast receiver to receive the change of group from SuperWeChatHelper
+        //register broadcast receiver to receive the change of group from DemoHelper
         registerBroadcastReceiver();
 
 
@@ -155,7 +154,8 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         UmengUpdateAgent.update(this);
     }
 
-    private void checkAccountlogin(Bundle savedInstanceState) {
+    private void checkLogined(Bundle savedInstanceState) {
+        //make sure activity will not in background if user is logged into another device or removed
         if (savedInstanceState != null && savedInstanceState.getBoolean(Constant.ACCOUNT_REMOVED, false)) {
             SuperWeChatHelper.getInstance().logout(false, null);
             finish();
@@ -168,11 +168,10 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
         }
     }
 
-
     private void savePower() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String packageName = getPackageName();
-            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             if (!pm.isIgnoringBatteryOptimizations(packageName)) {
                 Intent intent = new Intent();
                 intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
@@ -209,21 +208,20 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 //		mTabs[2] = (Button) findViewById(R.id.btn_setting);
 //		// select first tab
 //		mTabs[0].setSelected(true);
-        txtLeft.setVisibility(View.VISIBLE);
-        imgRight.setVisibility(View.VISIBLE);
-        adapter =new MainTabAdpter(getSupportFragmentManager());
+        mTxtLeft.setVisibility(View.VISIBLE);
+        mImgRight.setVisibility(View.VISIBLE);
+        adapter = new MainTabAdpter(getSupportFragmentManager());
         adapter.clear();
-        layoutViewpage.setAdapter(adapter);
-        layoutViewpage.setOffscreenPageLimit(4);
-
+        mLayoutViewpage.setAdapter(adapter);
+        mLayoutViewpage.setOffscreenPageLimit(4);
         adapter.addFragment(new ConversationListFragment(),getString(R.string.app_name));
         adapter.addFragment(new ContactListFragment(),getString(R.string.contacts));
         adapter.addFragment(new DiscoverFragment(),getString(R.string.discover));
-        adapter.addFragment(new SettingsFragment(),getString(R.string.me));
+        adapter.addFragment(new ProfileFragment(),getString(R.string.me));
         adapter.notifyDataSetChanged();
-        layoutTabhost.setChecked(0);
-        layoutTabhost.setOnCheckedChangeListener(this);
-        layoutViewpage.setOnPageChangeListener(this);
+        mLayoutTabhost.setChecked(0);
+        mLayoutTabhost.setOnCheckedChangeListener(this);
+        mLayoutViewpage.setOnPageChangeListener(this);
     }
 
 
@@ -332,8 +330,8 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
     @Override
     public void onPageSelected(int position) {
-        layoutTabhost.setChecked(position);
-        layoutViewpage.setCurrentItem(position);
+        mLayoutTabhost.setChecked(position);
+        mLayoutViewpage.setCurrentItem(position);
     }
 
     @Override
@@ -343,7 +341,7 @@ public class MainActivity extends BaseActivity implements DMTabHost.OnCheckedCha
 
     @Override
     public void onCheckedChange(int checkedPosition, boolean byUser) {
-        layoutViewpage.setCurrentItem(checkedPosition,false);
+        mLayoutViewpage.setCurrentItem(checkedPosition,false);
     }
 
     public class MyContactListener implements EMContactListener {

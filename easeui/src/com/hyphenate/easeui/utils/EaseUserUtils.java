@@ -1,4 +1,3 @@
-
 package com.hyphenate.easeui.utils;
 
 import android.content.Context;
@@ -18,13 +17,13 @@ import com.hyphenate.easeui.domain.User;
 
 public class EaseUserUtils {
     private static final String TAG = EaseUserUtils.class.getSimpleName();
-    
+
     static EaseUserProfileProvider userProvider;
-    
+
     static {
         userProvider = EaseUI.getInstance().getUserProfileProvider();
     }
-    
+
     /**
      * get EaseUser according username
      * @param username
@@ -33,7 +32,7 @@ public class EaseUserUtils {
     public static EaseUser getUserInfo(String username){
         if(userProvider != null)
             return userProvider.getUser(username);
-        
+
         return null;
     }
     public static User getAppUserInfo(String username){
@@ -50,13 +49,13 @@ public class EaseUserUtils {
 
         return null;
     }
-    
+
     /**
      * set user avatar
      * @param username
      */
     public static void setUserAvatar(Context context, String username, ImageView imageView){
-    	EaseUser user = getUserInfo(username);
+        EaseUser user = getUserInfo(username);
         if(user != null && user.getAvatar() != null){
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
@@ -69,18 +68,18 @@ public class EaseUserUtils {
             Glide.with(context).load(R.drawable.ease_default_avatar).into(imageView);
         }
     }
-    
+
     /**
      * set user's nickname
      */
     public static void setUserNick(String username,TextView textView){
         if(textView != null){
-        	EaseUser user = getUserInfo(username);
-        	if(user != null && user.getNick() != null){
-        		textView.setText(user.getNick());
-        	}else{
-        		textView.setText(username);
-        	}
+            EaseUser user = getUserInfo(username);
+            if(user != null && user.getNick() != null){
+                textView.setText(user.getNick());
+            }else{
+                textView.setText(username);
+            }
         }
     }
     /**
@@ -90,6 +89,7 @@ public class EaseUserUtils {
     public static void setAppUserAvatar(Context context, String username, ImageView imageView){
         User user = getAppUserInfo(username);
         if(user != null && user.getAvatar() != null){
+            Log.e(TAG,"setAppUserAvatar="+user.getAvatar());
             try {
                 int avatarResId = Integer.parseInt(user.getAvatar());
                 Glide.with(context).load(avatarResId).into(imageView);
@@ -130,6 +130,10 @@ public class EaseUserUtils {
 
     public static void setCurrentAppUserNameWithNo(TextView textView) {
         String username = EMClient.getInstance().getCurrentUser();
+        setAppUserName("微信号 : ",username,textView);
+    }
+
+    public static void setAppUserNameWithNo(String username, TextView textView) {
         setAppUserName("微信号 : ",username,textView);
     }
 

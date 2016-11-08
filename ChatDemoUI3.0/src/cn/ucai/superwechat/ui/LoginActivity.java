@@ -215,7 +215,7 @@ public class LoginActivity extends BaseActivity {
                           if (user!=null) {
                               UserDao dao = new UserDao(mContext);
                               dao.saveUser(user);
-                        SuperWeChatHelper.getInstance().setCurrentUser(user);
+                              SuperWeChatHelper.getInstance().saveAppContact(user);
                               loginSucess();
                           }
                       }else {

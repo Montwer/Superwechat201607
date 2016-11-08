@@ -40,6 +40,7 @@ import cn.ucai.superwechat.data.NetDao;
 import cn.ucai.superwechat.data.OkHttpUtils;
 import cn.ucai.superwechat.db.InviteMessgeDao;
 import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.utils.L;
 import cn.ucai.superwechat.utils.ResultUtils;
 
 public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
@@ -201,7 +202,7 @@ public class NewFriendsMsgAdapter extends ArrayAdapter<InviteMessage> {
 		pd.setMessage(str1);
 		pd.setCanceledOnTouchOutside(false);
 		pd.show();
-
+		L.e("acceptInvitation","acceptInvitation........");
 		new Thread(new Runnable() {
 			public void run() {
 				// call api

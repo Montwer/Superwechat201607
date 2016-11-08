@@ -1,69 +1,71 @@
-package cn.ucai.superwechat;
-
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
-
-import com.easemob.redpacketui.RedPacketConstant;
-import com.easemob.redpacketui.utils.RedPacketUtil;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.EMConnectionListener;
-import com.hyphenate.EMContactListener;
-import com.hyphenate.EMError;
-import com.hyphenate.EMGroupChangeListener;
-import com.hyphenate.EMMessageListener;
-import com.hyphenate.EMValueCallBack;
-import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMCmdMessageBody;
-import com.hyphenate.chat.EMGroup;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.chat.EMMessage.ChatType;
-import com.hyphenate.chat.EMMessage.Status;
-import com.hyphenate.chat.EMMessage.Type;
-import com.hyphenate.chat.EMOptions;
-import com.hyphenate.chat.EMTextMessageBody;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
-import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
-import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
-import com.hyphenate.easeui.domain.EaseEmojicon;
-import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.domain.User;
-import com.hyphenate.easeui.model.EaseAtMessageHelper;
-import com.hyphenate.easeui.model.EaseNotifier;
-import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.exceptions.HyphenateException;
-import com.hyphenate.util.EMLog;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import cn.ucai.superwechat.db.InviteMessgeDao;
-import cn.ucai.superwechat.db.SuperWeChatHelperDBManager;
-import cn.ucai.superwechat.db.UserDao;
-import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
-import cn.ucai.superwechat.domain.InviteMessage;
-import cn.ucai.superwechat.domain.RobotUser;
-import cn.ucai.superwechat.parse.UserProfileManager;
-import cn.ucai.superwechat.receiver.CallReceiver;
-import cn.ucai.superwechat.ui.ChatActivity;
-import cn.ucai.superwechat.ui.MainActivity;
-import cn.ucai.superwechat.ui.VideoCallActivity;
-import cn.ucai.superwechat.ui.VoiceCallActivity;
-import cn.ucai.superwechat.utils.L;
-import cn.ucai.superwechat.utils.PreferenceManager;
-
+ package cn.ucai.superwechat;
+ import android.app.Activity;
+ import android.content.BroadcastReceiver;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.content.IntentFilter;
+ import android.support.v4.content.LocalBroadcastManager;
+ import android.util.Log;
+ import com.easemob.redpacketui.RedPacketConstant;
+ import com.easemob.redpacketui.utils.RedPacketUtil;
+ import com.hyphenate.EMCallBack;
+ import com.hyphenate.EMConnectionListener;
+ import com.hyphenate.EMContactListener;
+ import com.hyphenate.EMError;
+ import com.hyphenate.EMGroupChangeListener;
+ import com.hyphenate.EMMessageListener;
+ import com.hyphenate.EMValueCallBack;
+ import com.hyphenate.chat.EMClient;
+ import com.hyphenate.chat.EMCmdMessageBody;
+ import com.hyphenate.chat.EMGroup;
+ import com.hyphenate.chat.EMMessage;
+ import com.hyphenate.chat.EMMessage.ChatType;
+ import com.hyphenate.chat.EMMessage.Status;
+ import com.hyphenate.chat.EMMessage.Type;
+ import com.hyphenate.chat.EMOptions;
+ import com.hyphenate.chat.EMTextMessageBody;
+ import com.hyphenate.easeui.controller.EaseUI;
+ import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
+ import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
+ import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
+ import com.hyphenate.easeui.domain.EaseEmojicon;
+ import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+ import com.hyphenate.easeui.domain.EaseUser;
+ import com.hyphenate.easeui.domain.User;
+ import com.hyphenate.easeui.model.EaseAtMessageHelper;
+ import com.hyphenate.easeui.model.EaseNotifier;
+ import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
+ import com.hyphenate.easeui.utils.EaseCommonUtils;
+ import com.hyphenate.exceptions.HyphenateException;
+ import com.hyphenate.util.EMLog;
+ import java.util.ArrayList;
+ import java.util.HashMap;
+ import java.util.Hashtable;
+ import java.util.List;
+ import java.util.Map;
+ import java.util.UUID;
+ import cn.ucai.superwechat.bean.Result;
+ import cn.ucai.superwechat.data.NetDao;
+ import cn.ucai.superwechat.data.OkHttpUtils;
+ import cn.ucai.superwechat.db.InviteMessgeDao;
+ import cn.ucai.superwechat.db.SuperWeChatHelperDBManager;
+ import cn.ucai.superwechat.db.UserDao;
+ import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
+ import cn.ucai.superwechat.domain.InviteMessage;
+ import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
+ import cn.ucai.superwechat.domain.RobotUser;
+ import cn.ucai.superwechat.parse.UserProfileManager;
+ import cn.ucai.superwechat.receiver.CallReceiver;
+ import cn.ucai.superwechat.ui.ChatActivity;
+ import cn.ucai.superwechat.ui.MainActivity;
+ import cn.ucai.superwechat.ui.VideoCallActivity;
+ import cn.ucai.superwechat.ui.VoiceCallActivity;
+ import cn.ucai.superwechat.utils.L;
+ import cn.ucai.superwechat.utils.PreferenceManager;
+ import cn.ucai.superwechat.utils.ResultUtils;
 public class SuperWeChatHelper {
+
+
     /**
      * data sync listener
      */
@@ -76,28 +78,27 @@ public class SuperWeChatHelper {
     }
 
     protected static final String TAG = "DemoHelper";
-    
-	private EaseUI easeUI;
-	
+
+    private EaseUI easeUI;
+
     /**
      * EMEventListener
      */
     protected EMMessageListener messageListener = null;
 
-	private Map<String, EaseUser> contactList;
+    private Map<String, EaseUser> contactList;
 
-	private Map<String, RobotUser> robotList;
+    private Map<String, RobotUser> robotList;
 
-	private UserProfileManager userProManager;
+    private UserProfileManager userProManager;
 
-	private static SuperWeChatHelper instance = null;
-	
-	private SuperWeChatModel demoModel = null;
-    private Map<String, User> appcontactList;
+    private static SuperWeChatHelper instance = null;
 
-    private User currentUser=null;
-	
-	/**
+    private SuperWeChatModel demoModel = null;
+
+    private Map<String, User> appContactList;
+
+    /**
      * sync groups status listener
      */
     private List<DataSyncListener> syncGroupsListeners;
@@ -116,11 +117,11 @@ public class SuperWeChatHelper {
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
-	
-	public boolean isVoiceCalling;
+
+    public boolean isVoiceCalling;
     public boolean isVideoCalling;
 
-	private String username;
+    private String username;
 
     private Context appContext;
 
@@ -133,52 +134,52 @@ public class SuperWeChatHelper {
 
     private boolean isGroupAndContactListenerRegisted;
 
-	private SuperWeChatHelper() {
-	}
+    private SuperWeChatHelper() {
+    }
 
-	public synchronized static SuperWeChatHelper getInstance() {
-		if (instance == null) {
-			instance = new SuperWeChatHelper();
-		}
-		return instance;
-	}
+    public synchronized static SuperWeChatHelper getInstance() {
+        if (instance == null) {
+            instance = new SuperWeChatHelper();
+        }
+        return instance;
+    }
 
-	/**
-	 * init helper
-	 * 
-	 * @param context
-	 *            application context
-	 */
-	public void init(Context context) {
-	    demoModel = new SuperWeChatModel(context);
-	    EMOptions options = initChatOptions();
-	    //use default options if options is null
-		if (EaseUI.getInstance().init(context, options)) {
-		    appContext = context;
-		    
-		    //debug mode, you'd better set it to false, if you want release your App officially.
-		    EMClient.getInstance().setDebugMode(true);
-		    //get easeui instance
-		    easeUI = EaseUI.getInstance();
-		    //to set user's profile and avatar
-		    setEaseUIProviders();
-			//initialize preference manager
-			PreferenceManager.init(context);
-			//initialize profile manager
-			getUserProfileManager().init(context);
-			
-			EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
+    /**
+     * init helper
+     *
+     * @param context
+     *            application context
+     */
+    public void init(Context context) {
+        demoModel = new SuperWeChatModel(context);
+        EMOptions options = initChatOptions();
+        //use default options if options is null
+        if (EaseUI.getInstance().init(context, options)) {
+            appContext = context;
 
-			setGlobalListeners();
-			broadcastManager = LocalBroadcastManager.getInstance(appContext);
-	        initDbDao();
-		}
-	}
+            //debug mode, you'd better set it to false, if you want release your App officially.
+            EMClient.getInstance().setDebugMode(true);
+            //get easeui instance
+            easeUI = EaseUI.getInstance();
+            //to set user's profile and avatar
+            setEaseUIProviders();
+            //initialize preference manager
+            PreferenceManager.init(context);
+            //initialize profile manager
+            getUserProfileManager().init(context);
 
-	
-	private EMOptions initChatOptions(){
+            EMClient.getInstance().callManager().getVideoCallHelper().setAdaptiveVideoFlag(getModel().isAdaptiveVideoEncode());
+
+            setGlobalListeners();
+            broadcastManager = LocalBroadcastManager.getInstance(appContext);
+            initDbDao();
+        }
+    }
+
+
+    private EMOptions initChatOptions(){
         Log.d(TAG, "init HuanXin Options");
-        
+
         EMOptions options = new EMOptions();
         // set if accept the invitation automatically
         options.setAcceptInvitationAlways(false);
@@ -203,22 +204,24 @@ public class SuperWeChatHelper {
                 options.setImPort(Integer.valueOf(demoModel.getIMServer().split(":")[1]));
             }
         }
-        
+
         options.allowChatroomOwnerLeave(getModel().isChatroomOwnerLeaveAllowed());
         options.setDeleteMessagesAsExitGroup(getModel().isDeleteMessagesAsExitGroup());
         options.setAutoAcceptGroupInvitation(getModel().isAutoAcceptGroupInvitation());
-        
+
         return options;
     }
 
     protected void setEaseUIProviders() {
-    	// set profile provider if you want easeUI to handle avatar and nickname
+        // set profile provider if you want easeUI to handle avatar and nickname
         easeUI.setUserProfileProvider(new EaseUserProfileProvider() {
-            
+
             @Override
             public EaseUser getUser(String username) {
                 return getUserInfo(username);
             }
+
+            @Override
             public User getAppUser(String username) {
                 return getAppUserInfo(username);
             }
@@ -226,22 +229,22 @@ public class SuperWeChatHelper {
 
         //set options 
         easeUI.setSettingsProvider(new EaseSettingsProvider() {
-            
+
             @Override
             public boolean isSpeakerOpened() {
                 return demoModel.getSettingMsgSpeaker();
             }
-            
+
             @Override
             public boolean isMsgVibrateAllowed(EMMessage message) {
                 return demoModel.getSettingMsgVibrate();
             }
-            
+
             @Override
             public boolean isMsgSoundAllowed(EMMessage message) {
                 return demoModel.getSettingMsgSound();
             }
-            
+
             @Override
             public boolean isMsgNotifyAllowed(EMMessage message) {
                 if(message == null){
@@ -271,7 +274,7 @@ public class SuperWeChatHelper {
         });
         //set emoji icon provider
         easeUI.setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
-            
+
             @Override
             public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
                 EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
@@ -288,25 +291,25 @@ public class SuperWeChatHelper {
                 return null;
             }
         });
-        
+
         //set notification options, will use default if you don't set it
         easeUI.getNotifier().setNotificationInfoProvider(new EaseNotificationInfoProvider() {
-            
+
             @Override
             public String getTitle(EMMessage message) {
-              //you can update title here
+                //you can update title here
                 return null;
             }
-            
+
             @Override
             public int getSmallIcon(EMMessage message) {
-              //you can update icon here
+                //you can update icon here
                 return 0;
             }
-            
+
             @Override
             public String getDisplayedText(EMMessage message) {
-            	// be used on notification bar, different text according the message type.
+                // be used on notification bar, different text according the message type.
                 String ticker = EaseCommonUtils.getMessageDigest(message, appContext);
                 if(message.getType() == Type.TXT){
                     ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
@@ -324,17 +327,17 @@ public class SuperWeChatHelper {
                     return message.getFrom() + ": " + ticker;
                 }
             }
-            
+
             @Override
             public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
                 // here you can customize the text.
                 // return fromUsersNum + "contacts send " + messageNum + "messages to you";
-            	return null;
+                return null;
             }
-            
+
             @Override
             public Intent getLaunchIntent(EMMessage message) {
-            	// you can set what activity you want display when user click the notification
+                // you can set what activity you want display when user click the notification
                 Intent intent = new Intent(appContext, ChatActivity.class);
                 // open calling activity if there is call
                 if(isVideoCalling){
@@ -354,7 +357,7 @@ public class SuperWeChatHelper {
                         }else{
                             intent.putExtra("chatType", Constant.CHATTYPE_CHATROOM);
                         }
-                        
+
                     }
                 }
                 return intent;
@@ -370,11 +373,11 @@ public class SuperWeChatHelper {
         syncGroupsListeners = new ArrayList<DataSyncListener>();
         syncContactsListeners = new ArrayList<DataSyncListener>();
         syncBlackListListeners = new ArrayList<DataSyncListener>();
-        
+
         isGroupsSyncedWithServer = demoModel.isGroupsSynced();
         isContactsSyncedWithServer = demoModel.isContactSynced();
         isBlackListSyncedWithServer = demoModel.isBacklistSynced();
-        
+
         // create the global connection listener
         connectionListener = new EMConnectionListener() {
             @Override
@@ -413,21 +416,21 @@ public class SuperWeChatHelper {
         }
 
         //register incoming call receiver
-        appContext.registerReceiver(callReceiver, callFilter);    
+        appContext.registerReceiver(callReceiver, callFilter);
         //register connection listener
-        EMClient.getInstance().addConnectionListener(connectionListener);       
+        EMClient.getInstance().addConnectionListener(connectionListener);
         //register group and contact event listener
         registerGroupAndContactListener();
         //register message event listener
         registerMessageListener();
-        
+
     }
-    
+
     private void initDbDao() {
         inviteMessgeDao = new InviteMessgeDao(appContext);
         userDao = new UserDao(appContext);
     }
-    
+
     /**
      * register group and contact listener, you need register when login
      */
@@ -437,9 +440,9 @@ public class SuperWeChatHelper {
             EMClient.getInstance().contactManager().setContactListener(new MyContactListener());
             isGroupAndContactListenerRegisted = true;
         }
-        
+
     }
-    
+
     /**
      * group change listener
      */
@@ -447,9 +450,9 @@ public class SuperWeChatHelper {
 
         @Override
         public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             // user invite you to join group
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
@@ -459,16 +462,16 @@ public class SuperWeChatHelper {
             msg.setReason(reason);
             msg.setGroupInviter(inviter);
             Log.d(TAG, "receive invitation to join the group：" + groupName);
-            msg.setStatus(InviteMessage.InviteMesageStatus.GROUPINVITATION);
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
         public void onInvitationAccepted(String groupId, String invitee, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             //user accept your invitation
             boolean hasGroup = false;
             EMGroup _group = null;
@@ -481,7 +484,7 @@ public class SuperWeChatHelper {
             }
             if (!hasGroup)
                 return;
-            
+
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
@@ -490,16 +493,16 @@ public class SuperWeChatHelper {
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
             Log.d(TAG, invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
-            msg.setStatus(InviteMessage.InviteMesageStatus.GROUPINVITATION_ACCEPTED);
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
-        
+
         @Override
         public void onInvitationDeclined(String groupId, String invitee, String reason) {
-            
+
             new InviteMessgeDao(appContext).deleteMessage(groupId);
-            
+
             //user declined your invitation
             EMGroup group = null;
             for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
@@ -510,7 +513,7 @@ public class SuperWeChatHelper {
             }
             if (group == null)
                 return;
-            
+
             InviteMessage msg = new InviteMessage();
             msg.setFrom(groupId);
             msg.setTime(System.currentTimeMillis());
@@ -519,7 +522,7 @@ public class SuperWeChatHelper {
             msg.setReason(reason);
             msg.setGroupInviter(invitee);
             Log.d(TAG, invitee + "Declined to join the group：" + group.getGroupName());
-            msg.setStatus(InviteMessage.InviteMesageStatus.GROUPINVITATION_DECLINED);
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
@@ -532,13 +535,13 @@ public class SuperWeChatHelper {
 
         @Override
         public void onGroupDestroyed(String groupId, String groupName) {
-        	// group is dismissed, 
+            // group is dismissed,
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
 
         @Override
         public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
-            
+
             // user apply to join group
             InviteMessage msg = new InviteMessage();
             msg.setFrom(applyer);
@@ -547,7 +550,7 @@ public class SuperWeChatHelper {
             msg.setGroupName(groupName);
             msg.setReason(reason);
             Log.d(TAG, applyer + " Apply to join group：" + groupName);
-            msg.setStatus(InviteMessage.InviteMesageStatus.BEAPPLYED);
+            msg.setStatus(InviteMesageStatus.BEAPPLYED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
@@ -596,15 +599,16 @@ public class SuperWeChatHelper {
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
         }
     }
-    
+
     /***
      * 好友变化listener
-     * 
+     *
      */
     public class MyContactListener implements EMContactListener {
 
         @Override
         public void onContactAdded(String username) {
+            L.e(TAG,"MyContactListener,onContactAdded...");
             // save contact
             Map<String, EaseUser> localUsers = getContactList();
             Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
@@ -616,11 +620,34 @@ public class SuperWeChatHelper {
             toAddUsers.put(username, user);
             localUsers.putAll(toAddUsers);
 
+            Map<String, User> localAppUsers = getAppContactList();
+            if(!localAppUsers.containsKey(username)){
+                NetDao.addContact(appContext, EMClient.getInstance().getCurrentUser(),username, new OkHttpUtils.OnCompleteListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        if(s!=null){
+                            Result result = ResultUtils.getResultFromJson(s, User.class);
+                            if(result!=null && result.isRetMsg()){
+                                User u = (User) result.getRetData();
+                                saveAppContact(u);
+                                broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            }
+
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
         public void onContactDeleted(String username) {
+            L.e(TAG,"MyContactListener,onContactDeleted...");
             Map<String, EaseUser> localUsers = SuperWeChatHelper.getInstance().getContactList();
             localUsers.remove(username);
             userDao.deleteContact(username);
@@ -631,6 +658,7 @@ public class SuperWeChatHelper {
 
         @Override
         public void onContactInvited(String username, String reason) {
+            L.e(TAG,"MyContactListener,onContactInvited...");
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
 
             for (InviteMessage inviteMessage : msgs) {
@@ -645,13 +673,14 @@ public class SuperWeChatHelper {
             msg.setReason(reason);
             Log.d(TAG, username + "apply to be your friend,reason: " + reason);
             // set invitation status
-            msg.setStatus(InviteMessage.InviteMesageStatus.BEINVITEED);
+            msg.setStatus(InviteMesageStatus.BEINVITEED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
         public void onContactAgreed(String username) {
+            L.e(TAG,"MyContactListener,onContactAgreed...");
             List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
             for (InviteMessage inviteMessage : msgs) {
                 if (inviteMessage.getFrom().equals(username)) {
@@ -663,18 +692,19 @@ public class SuperWeChatHelper {
             msg.setFrom(username);
             msg.setTime(System.currentTimeMillis());
             Log.d(TAG, username + "accept your request");
-            msg.setStatus(InviteMessage.InviteMesageStatus.BEAGREED);
+            msg.setStatus(InviteMesageStatus.BEAGREED);
             notifyNewInviteMessage(msg);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
         @Override
         public void onContactRefused(String username) {
+            L.e(TAG,"MyContactListener,onContactRefused...");
             // your request was refused
             Log.d(username, username + " refused to your request");
         }
     }
-    
+
     /**
      * save and notify invitation message
      * @param msg
@@ -689,7 +719,7 @@ public class SuperWeChatHelper {
         // notify there is new message
         getNotifier().vibrateAndPlayTone(null);
     }
-    
+
     /**
      * user has logged into another device
      */
@@ -699,7 +729,7 @@ public class SuperWeChatHelper {
         intent.putExtra(Constant.ACCOUNT_CONFLICT, true);
         appContext.startActivity(intent);
     }
-    
+
     /**
      * account is removed
      */
@@ -709,10 +739,10 @@ public class SuperWeChatHelper {
         intent.putExtra(Constant.ACCOUNT_REMOVED, true);
         appContext.startActivity(intent);
     }
-	
-	private EaseUser getUserInfo(String username){
-		// To get instance of EaseUser, here we get it from the user list in memory
-		// You'd better cache it if you get it from your server
+
+    private EaseUser getUserInfo(String username){
+        // To get instance of EaseUser, here we get it from the user list in memory
+        // You'd better cache it if you get it from your server
         EaseUser user = null;
         if(username.equals(EMClient.getInstance().getCurrentUser()))
             return getUserProfileManager().getCurrentUserInfo();
@@ -727,18 +757,20 @@ public class SuperWeChatHelper {
             EaseCommonUtils.setUserInitialLetter(user);
         }
         return user;
-	}
+    }
 
     private User getAppUserInfo(String username){
         // To get instance of EaseUser, here we get it from the user list in memory
         // You'd better cache it if you get it from your server
         User user = null;
         user = getAppContactList().get(username);
+
         // if user is not in your contacts, set inital letter for him/her
         if(user == null){
             user = new User(username);
             EaseCommonUtils.setAppUserInitialLetter(user);
         }
+        L.e(TAG,"user="+user);
         return user;
     }
 
@@ -748,23 +780,23 @@ public class SuperWeChatHelper {
      * activityList.size() <= 0 means all activities already in background or not in Activity Stack
      */
     protected void registerMessageListener() {
-    	messageListener = new EMMessageListener() {
+        messageListener = new EMMessageListener() {
             private BroadcastReceiver broadCastReceiver = null;
-			
-			@Override
-			public void onMessageReceived(List<EMMessage> messages) {
-			    for (EMMessage message : messages) {
-			        EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
-			        // in background, do not refresh UI, notify it in notification bar
-			        if(!easeUI.hasForegroundActivies()){
-			            getNotifier().onNewMsg(message);
-			        }
-			    }
-			}
-			
-			@Override
-			public void onCmdMessageReceived(List<EMMessage> messages) {
-			    for (EMMessage message : messages) {
+
+            @Override
+            public void onMessageReceived(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
+                    EMLog.d(TAG, "onMessageReceived id : " + message.getMsgId());
+                    // in background, do not refresh UI, notify it in notification bar
+                    if(!easeUI.hasForegroundActivies()){
+                        getNotifier().onNewMsg(message);
+                    }
+                }
+            }
+
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> messages) {
+                for (EMMessage message : messages) {
                     EMLog.d(TAG, "receive command message");
                     //get message body
                     EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
@@ -782,110 +814,111 @@ public class SuperWeChatHelper {
                     //message.getStringAttribute("");
                     EMLog.d(TAG, String.format("Command：action:%s,message:%s", action,message.toString()));
                 }
-			}
+            }
 
-			@Override
-			public void onMessageReadAckReceived(List<EMMessage> messages) {
-			}
-			
-			@Override
-			public void onMessageDeliveryAckReceived(List<EMMessage> message) {
-			}
-			
-			@Override
-			public void onMessageChanged(EMMessage message, Object change) {
-				
-			}
-		};
-		
+            @Override
+            public void onMessageReadAckReceived(List<EMMessage> messages) {
+            }
+
+            @Override
+            public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+            }
+
+            @Override
+            public void onMessageChanged(EMMessage message, Object change) {
+
+            }
+        };
+
         EMClient.getInstance().chatManager().addMessageListener(messageListener);
     }
 
-	/**
-	 * if ever logged in
-	 * 
-	 * @return
-	 */
-	public boolean isLoggedIn() {
-		return EMClient.getInstance().isLoggedInBefore();
-	}
+    /**
+     * if ever logged in
+     *
+     * @return
+     */
+    public boolean isLoggedIn() {
+        return EMClient.getInstance().isLoggedInBefore();
+    }
 
-	/**
-	 * logout
-	 * 
-	 * @param unbindDeviceToken
-	 *            whether you need unbind your device token
-	 * @param callback
-	 *            callback
-	 */
-	public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
-		endCall();
-		Log.d(TAG, "logout: " + unbindDeviceToken);
-		EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
+    /**
+     * logout
+     *
+     * @param unbindDeviceToken
+     *            whether you need unbind your device token
+     * @param callback
+     *            callback
+     */
+    public void logout(boolean unbindDeviceToken, final EMCallBack callback) {
+        endCall();
+        Log.d(TAG, "logout: " + unbindDeviceToken);
+        EMClient.getInstance().logout(unbindDeviceToken, new EMCallBack() {
 
-			@Override
-			public void onSuccess() {
-				Log.d(TAG, "logout: onSuccess");
-			    reset();
-				if (callback != null) {
-					callback.onSuccess();
-				}
-
-			}
-
-			@Override
-			public void onProgress(int progress, String status) {
-				if (callback != null) {
-					callback.onProgress(progress, status);
-				}
-			}
-
-			@Override
-			public void onError(int code, String error) {
-				Log.d(TAG, "logout: onSuccess");
+            @Override
+            public void onSuccess() {
+                Log.d(TAG, "logout: onSuccess");
                 reset();
-				if (callback != null) {
-					callback.onError(code, error);
-				}
-			}
-		});
-	}
-	
-	/**
-	 * get instance of EaseNotifier
-	 * @return
-	 */
-	public EaseNotifier getNotifier(){
-	    return easeUI.getNotifier();
-	}
-	
-	public SuperWeChatModel getModel(){
+                if (callback != null) {
+                    callback.onSuccess();
+                }
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                if (callback != null) {
+                    callback.onProgress(progress, status);
+                }
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                Log.d(TAG, "logout: onSuccess");
+                reset();
+                if (callback != null) {
+                    callback.onError(code, error);
+                }
+            }
+        });
+    }
+
+    /**
+     * get instance of EaseNotifier
+     * @return
+     */
+    public EaseNotifier getNotifier(){
+        return easeUI.getNotifier();
+    }
+
+    public SuperWeChatModel getModel(){
         return (SuperWeChatModel) demoModel;
     }
-	
-	/**
-	 * update contact list
-	 *
+
+    /**
+     * update contact list
+     *
+     * @param aContactList
      */
-	public void setContactList(Map<String, EaseUser> aContactList) {
-		if(aContactList == null){
-		    if (contactList != null) {
-		        contactList.clear();
-		    }
-			return;
-		}
-		
-		contactList = aContactList;
-	}
-	
-	/**
+    public void setContactList(Map<String, EaseUser> aContactList) {
+        if(aContactList == null){
+            if (contactList != null) {
+                contactList.clear();
+            }
+            return;
+        }
+
+        contactList = aContactList;
+    }
+
+    /**
      * save single contact 
      */
     public void saveContact(EaseUser user){
-    	contactList.put(user.getUsername(), user);
-    	demoModel.saveContact(user);
+        contactList.put(user.getUsername(), user);
+        demoModel.saveContact(user);
     }
-    
+
     /**
      * get contact list
      *
@@ -895,74 +928,75 @@ public class SuperWeChatHelper {
         if (isLoggedIn() && contactList == null) {
             contactList = demoModel.getContactList();
         }
-        
+
         // return a empty non-null object to avoid app crash
         if(contactList == null){
-        	return new Hashtable<String, EaseUser>();
+            return new Hashtable<String, EaseUser>();
         }
-        
+
         return contactList;
     }
-    
+
     /**
      * set current username
      * @param username
      */
     public void setCurrentUserName(String username){
-    	this.username = username;
-    	demoModel.setCurrentUserName(username);
+        this.username = username;
+        demoModel.setCurrentUserName(username);
     }
-    
+
     /**
      * get current user's id
      */
     public String getCurrentUsernName(){
-    	if(username == null){
-    		username = demoModel.getCurrentUsernName();
-    	}
-    	return username;
+        if(username == null){
+            username = demoModel.getCurrentUsernName();
+        }
+        return username;
     }
 
-	public void setRobotList(Map<String, RobotUser> robotList) {
-		this.robotList = robotList;
-	}
+    public void setRobotList(Map<String, RobotUser> robotList) {
+        this.robotList = robotList;
+    }
 
-	public Map<String, RobotUser> getRobotList() {
-		if (isLoggedIn() && robotList == null) {
-			robotList = demoModel.getRobotList();
-		}
-		return robotList;
-	}
+    public Map<String, RobotUser> getRobotList() {
+        if (isLoggedIn() && robotList == null) {
+            robotList = demoModel.getRobotList();
+        }
+        return robotList;
+    }
 
-	 /**
+    /**
      * update user list to cache and database
      *
-      */
+     * @param contactInfoList
+     */
     public void updateContactList(List<EaseUser> contactInfoList) {
-         for (EaseUser u : contactInfoList) {
+        for (EaseUser u : contactInfoList) {
             contactList.put(u.getUsername(), u);
-         }
-         ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
-         mList.addAll(contactList.values());
-         demoModel.saveContactList(mList);
+        }
+        ArrayList<EaseUser> mList = new ArrayList<EaseUser>();
+        mList.addAll(contactList.values());
+        demoModel.saveContactList(mList);
     }
 
-	public UserProfileManager getUserProfileManager() {
-		if (userProManager == null) {
-			userProManager = new UserProfileManager();
-		}
-		return userProManager;
-	}
+    public UserProfileManager getUserProfileManager() {
+        if (userProManager == null) {
+            userProManager = new UserProfileManager();
+        }
+        return userProManager;
+    }
 
-	void endCall() {
-		try {
-			EMClient.getInstance().callManager().endCall();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-  public void addSyncGroupListener(DataSyncListener listener) {
+    void endCall() {
+        try {
+            EMClient.getInstance().callManager().endCall();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addSyncGroupListener(DataSyncListener listener) {
         if (listener == null) {
             return;
         }
@@ -1015,197 +1049,197 @@ public class SuperWeChatHelper {
             syncBlackListListeners.remove(listener);
         }
     }
-	
-	/**
-    * Get group list from server
-    * This method will save the sync state
-    * @throws HyphenateException
-    */
-   public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback){
-       if(isSyncingGroupsWithServer){
-           return;
-       }
-       
-       isSyncingGroupsWithServer = true;
-       
-       new Thread(){
-           @Override
-           public void run(){
-               try {
-                   EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
-                   
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isGroupsSyncedWithServer = false;
-                       isSyncingGroupsWithServer = false;
-                       noitifyGroupSyncListeners(false);
-                       return;
-                   }
-                   
-                   demoModel.setGroupsSynced(true);
-                   
-                   isGroupsSyncedWithServer = true;
-                   isSyncingGroupsWithServer = false;
-                   
-                   //notify sync group list success
-                   noitifyGroupSyncListeners(true);
 
-                   if(callback != null){
-                       callback.onSuccess();
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setGroupsSynced(false);
-                   isGroupsSyncedWithServer = false;
-                   isSyncingGroupsWithServer = false;
-                   noitifyGroupSyncListeners(false);
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
-           
-           }
-       }.start();
-   }
+    /**
+     * Get group list from server
+     * This method will save the sync state
+     * @throws HyphenateException
+     */
+    public synchronized void asyncFetchGroupsFromServer(final EMCallBack callback){
+        if(isSyncingGroupsWithServer){
+            return;
+        }
 
-   public void noitifyGroupSyncListeners(boolean success){
-       for (DataSyncListener listener : syncGroupsListeners) {
-           listener.onSyncComplete(success);
-       }
-   }
-   
-   public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
-       if(isSyncingContactsWithServer){
-           return;
-       }
-       
-       isSyncingContactsWithServer = true;
-       
-       new Thread(){
-           @Override
-           public void run(){
-               List<String> usernames = null;
-               try {
-                   usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isContactsSyncedWithServer = false;
-                       isSyncingContactsWithServer = false;
-                       notifyContactsSyncListener(false);
-                       return;
-                   }
-                  
-                   Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
-                   for (String username : usernames) {
-                       EaseUser user = new EaseUser(username);
-                       EaseCommonUtils.setUserInitialLetter(user);
-                       userlist.put(username, user);
-                   }
-                   // save the contact list to cache
-                   getContactList().clear();
-                   getContactList().putAll(userlist);
+        isSyncingGroupsWithServer = true;
+
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    EMClient.getInstance().groupManager().getJoinedGroupsFromServer();
+
+                    // in case that logout already before server returns, we should return immediately
+                    if(!isLoggedIn()){
+                        isGroupsSyncedWithServer = false;
+                        isSyncingGroupsWithServer = false;
+                        noitifyGroupSyncListeners(false);
+                        return;
+                    }
+
+                    demoModel.setGroupsSynced(true);
+
+                    isGroupsSyncedWithServer = true;
+                    isSyncingGroupsWithServer = false;
+
+                    //notify sync group list success
+                    noitifyGroupSyncListeners(true);
+
+                    if(callback != null){
+                        callback.onSuccess();
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setGroupsSynced(false);
+                    isGroupsSyncedWithServer = false;
+                    isSyncingGroupsWithServer = false;
+                    noitifyGroupSyncListeners(false);
+                    if(callback != null){
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    public void noitifyGroupSyncListeners(boolean success){
+        for (DataSyncListener listener : syncGroupsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
+
+    public void asyncFetchContactsFromServer(final EMValueCallBack<List<String>> callback){
+        if(isSyncingContactsWithServer){
+            return;
+        }
+
+        isSyncingContactsWithServer = true;
+
+        new Thread(){
+            @Override
+            public void run(){
+                List<String> usernames = null;
+                try {
+                    usernames = EMClient.getInstance().contactManager().getAllContactsFromServer();
+                    // in case that logout already before server returns, we should return immediately
+                    if(!isLoggedIn()){
+                        isContactsSyncedWithServer = false;
+                        isSyncingContactsWithServer = false;
+                        notifyContactsSyncListener(false);
+                        return;
+                    }
+
+                    Map<String, EaseUser> userlist = new HashMap<String, EaseUser>();
+                    for (String username : usernames) {
+                        EaseUser user = new EaseUser(username);
+                        EaseCommonUtils.setUserInitialLetter(user);
+                        userlist.put(username, user);
+                    }
+                    // save the contact list to cache
+                    getContactList().clear();
+                    getContactList().putAll(userlist);
                     // save the contact list to database
-                   UserDao dao = new UserDao(appContext);
-                   List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
-                   dao.saveContactList(users);
+                    UserDao dao = new UserDao(appContext);
+                    List<EaseUser> users = new ArrayList<EaseUser>(userlist.values());
+                    dao.saveContactList(users);
 
-                   demoModel.setContactSynced(true);
-                   EMLog.d(TAG, "set contact syn status to true");
-                   
-                   isContactsSyncedWithServer = true;
-                   isSyncingContactsWithServer = false;
-                   
-                   //notify sync success
-                   notifyContactsSyncListener(true);
-                   
-                   getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+                    demoModel.setContactSynced(true);
+                    EMLog.d(TAG, "set contact syn status to true");
 
-                       @Override
-                       public void onSuccess(List<EaseUser> uList) {
-                           updateContactList(uList);
-                           getUserProfileManager().notifyContactInfosSyncListener(true);
-                       }
+                    isContactsSyncedWithServer = true;
+                    isSyncingContactsWithServer = false;
 
-                       @Override
-                       public void onError(int error, String errorMsg) {
-                       }
-                   });
-                   if(callback != null){
-                       callback.onSuccess(usernames);
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setContactSynced(false);
-                   isContactsSyncedWithServer = false;
-                   isSyncingContactsWithServer = false;
-                   notifyContactsSyncListener(false);
-                   e.printStackTrace();
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
-               
-           }
-       }.start();
-   }
+                    //notify sync success
+                    notifyContactsSyncListener(true);
 
-   public void notifyContactsSyncListener(boolean success){
-       for (DataSyncListener listener : syncContactsListeners) {
-           listener.onSyncComplete(success);
-       }
-   }
-   
-   public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback){
-       
-       if(isSyncingBlackListWithServer){
-           return;
-       }
-       
-       isSyncingBlackListWithServer = true;
-       
-       new Thread(){
-           @Override
-           public void run(){
-               try {
-                   List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
-                   
-                   // in case that logout already before server returns, we should return immediately
-                   if(!isLoggedIn()){
-                       isBlackListSyncedWithServer = false;
-                       isSyncingBlackListWithServer = false;
-                       notifyBlackListSyncListener(false);
-                       return;
-                   }
-                   
-                   demoModel.setBlacklistSynced(true);
-                   
-                   isBlackListSyncedWithServer = true;
-                   isSyncingBlackListWithServer = false;
-                   
-                   notifyBlackListSyncListener(true);
-                   if(callback != null){
-                       callback.onSuccess(usernames);
-                   }
-               } catch (HyphenateException e) {
-                   demoModel.setBlacklistSynced(false);
-                   
-                   isBlackListSyncedWithServer = false;
-                   isSyncingBlackListWithServer = true;
-                   e.printStackTrace();
-                   
-                   if(callback != null){
-                       callback.onError(e.getErrorCode(), e.toString());
-                   }
-               }
-               
-           }
-       }.start();
-   }
-	
-	public void notifyBlackListSyncListener(boolean success){
+                    getUserProfileManager().asyncFetchContactInfosFromServer(usernames,new EMValueCallBack<List<EaseUser>>() {
+
+                        @Override
+                        public void onSuccess(List<EaseUser> uList) {
+                            updateContactList(uList);
+                            getUserProfileManager().notifyContactInfosSyncListener(true);
+                        }
+
+                        @Override
+                        public void onError(int error, String errorMsg) {
+                        }
+                    });
+                    if(callback != null){
+                        callback.onSuccess(usernames);
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setContactSynced(false);
+                    isContactsSyncedWithServer = false;
+                    isSyncingContactsWithServer = false;
+                    notifyContactsSyncListener(false);
+                    e.printStackTrace();
+                    if(callback != null){
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    public void notifyContactsSyncListener(boolean success){
+        for (DataSyncListener listener : syncContactsListeners) {
+            listener.onSyncComplete(success);
+        }
+    }
+
+    public void asyncFetchBlackListFromServer(final EMValueCallBack<List<String>> callback){
+
+        if(isSyncingBlackListWithServer){
+            return;
+        }
+
+        isSyncingBlackListWithServer = true;
+
+        new Thread(){
+            @Override
+            public void run(){
+                try {
+                    List<String> usernames = EMClient.getInstance().contactManager().getBlackListFromServer();
+
+                    // in case that logout already before server returns, we should return immediately
+                    if(!isLoggedIn()){
+                        isBlackListSyncedWithServer = false;
+                        isSyncingBlackListWithServer = false;
+                        notifyBlackListSyncListener(false);
+                        return;
+                    }
+
+                    demoModel.setBlacklistSynced(true);
+
+                    isBlackListSyncedWithServer = true;
+                    isSyncingBlackListWithServer = false;
+
+                    notifyBlackListSyncListener(true);
+                    if(callback != null){
+                        callback.onSuccess(usernames);
+                    }
+                } catch (HyphenateException e) {
+                    demoModel.setBlacklistSynced(false);
+
+                    isBlackListSyncedWithServer = false;
+                    isSyncingBlackListWithServer = true;
+                    e.printStackTrace();
+
+                    if(callback != null){
+                        callback.onError(e.getErrorCode(), e.toString());
+                    }
+                }
+
+            }
+        }.start();
+    }
+
+    public void notifyBlackListSyncListener(boolean success){
         for (DataSyncListener listener : syncBlackListListeners) {
             listener.onSyncComplete(success);
         }
     }
-    
+
     public boolean isSyncingGroupsWithServer() {
         return isSyncingGroupsWithServer;
     }
@@ -1217,7 +1251,7 @@ public class SuperWeChatHelper {
     public boolean isSyncingBlackListWithServer() {
         return isSyncingBlackListWithServer;
     }
-    
+
     public boolean isGroupsSyncedWithServer() {
         return isGroupsSyncedWithServer;
     }
@@ -1229,25 +1263,25 @@ public class SuperWeChatHelper {
     public boolean isBlackListSyncedWithServer() {
         return isBlackListSyncedWithServer;
     }
-	
+
     synchronized void reset(){
         isSyncingGroupsWithServer = false;
         isSyncingContactsWithServer = false;
         isSyncingBlackListWithServer = false;
-        
+
         demoModel.setGroupsSynced(false);
         demoModel.setContactSynced(false);
         demoModel.setBlacklistSynced(false);
-        
+
         isGroupsSyncedWithServer = false;
         isContactsSyncedWithServer = false;
         isBlackListSyncedWithServer = false;
 
         isGroupAndContactListenerRegisted = false;
-        
+
         setContactList(null);
-        setRobotList(null);
         setAppContactList(null);
+        setRobotList(null);
         getUserProfileManager().reset();
         SuperWeChatHelperDBManager.getInstance().closeDB();
     }
@@ -1259,38 +1293,28 @@ public class SuperWeChatHelper {
     public void popActivity(Activity activity) {
         easeUI.popActivity(activity);
     }
-    public User getCurrentUser() {
-        if (currentUser==null){
-            String username =EMClient.getInstance().getCurrentUser();
-            L.e(TAG,"getCurrentUsername="+username);
-            currentUser=new User(username);
-        }
-        return currentUser;
-    }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
     /**
      * update contact list
      *
+     * @param aContactList
      */
-    public void setAppContactList(Map<String,User> aContactList) {
+    public void setAppContactList(Map<String, User> aContactList) {
         if(aContactList == null){
-            if (appcontactList != null) {
-                appcontactList.clear();
+            if (appContactList != null) {
+                appContactList.clear();
             }
             return;
         }
 
-        appcontactList = aContactList;
+        appContactList = aContactList;
     }
 
     /**
      * save single contact
      */
     public void saveAppContact(User user){
-        appcontactList.put(user.getMUserName(), user);
+        getAppContactList().put(user.getMUserName(), user);
         demoModel.saveAppContact(user);
     }
 
@@ -1300,27 +1324,30 @@ public class SuperWeChatHelper {
      * @return
      */
     public Map<String, User> getAppContactList() {
-        if (isLoggedIn() && (appcontactList == null||appcontactList.size()==0)) {
-            appcontactList = demoModel.getAppContactList();
+        L.e(TAG,"getAppContactList,appContactList="+appContactList);
+        if (isLoggedIn() && (appContactList == null || appContactList.size()==0)) {
+            appContactList = demoModel.getAppContactList();
         }
 
         // return a empty non-null object to avoid app crash
-        if(appcontactList == null){
+        if(appContactList == null){
             return new Hashtable<String, User>();
         }
 
-        return appcontactList;
+        L.e(TAG,"getAppContactList,appContactList="+appContactList.size());
+        return appContactList;
     }
     /**
      * update user list to cache and database
      *
+     * @param contactInfoList
      */
     public void updateAppContactList(List<User> contactInfoList) {
         for (User u : contactInfoList) {
-            appcontactList.put(u.getMUserName(), u);
+            appContactList.put(u.getMUserName(), u);
         }
         ArrayList<User> mList = new ArrayList<User>();
-        mList.addAll(appcontactList.values());
+        mList.addAll(appContactList.values());
         demoModel.saveAppContactList(mList);
     }
 }

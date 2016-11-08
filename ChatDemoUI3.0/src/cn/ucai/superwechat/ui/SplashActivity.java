@@ -40,7 +40,7 @@ private static final String TAG=SplashActivity.class.getSimpleName();
 					UserDao dao=new UserDao(mContext);
 					User user=dao.getUser(EMClient.getInstance().getCurrentUser());
 					L.e(TAG,"USER="+user);
-					SuperWeChatHelper.getInstance().setCurrentUser(user);
+					SuperWeChatHelper.getInstance().saveAppContact(user);
 					long costTime = System.currentTimeMillis() - start;
 					//wait
 					if (sleepTime - costTime > 0) {

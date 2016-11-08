@@ -88,6 +88,9 @@ public class EaseUserUtils {
      */
     public static void setAppUserAvatar(Context context, String username, ImageView imageView){
         User user = getAppUserInfo(username);
+        if (user==null){
+            user =new User(username);
+        }
         if(user != null && user.getAvatar() != null){
             Log.e(TAG,"setAppUserAvatar="+user.getAvatar());
             try {
@@ -97,6 +100,8 @@ public class EaseUserUtils {
                 //use default avatar
                 Glide.with(context).load(user.getAvatar()).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_hd_avatar).into(imageView);
             }
+        }else if (username!=null) {
+            User u =new User(username);
         }else{
             Glide.with(context).load(R.drawable.default_hd_avatar).into(imageView);
         }

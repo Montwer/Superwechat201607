@@ -11,7 +11,7 @@ import cn.ucai.superwechat.R;
 import cn.ucai.superwechat.runtimepermissions.PermissionsManager;
 
 /**
- * chat activity，EaseChatFragment was used {@link #EaseChatFragment};
+ * chat activity，EaseChatFragment was used ;
  *
  */
 public class ChatActivity extends BaseActivity{

@@ -1,3 +1,4 @@
+
 package cn.ucai.superwechat.ui;
 
 import android.os.Bundle;
@@ -30,14 +31,14 @@ public class FriendProfileActivity extends BaseActivity {
     TextView mTvUserinfoNick;
     @BindView(R.id.tv_userinfo_name)
     TextView mTvUserinfoName;
-    User user = null;
+
     @BindView(R.id.btn_add_contact)
     Button mBtnAddContact;
     @BindView(R.id.btn_send_msg)
     Button mBtnSendMsg;
     @BindView(R.id.btn_send_video)
     Button mBtnSendVideo;
-
+    User user =null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +84,7 @@ public class FriendProfileActivity extends BaseActivity {
                 MFGT.gotoAddFirendMsg(this,user.getMUserName());
                 break;
             case R.id.btn_send_msg:
+                MFGT.gotoChat(this,user.getMUserName());
                 break;
             case R.id.btn_send_video:
                 break;

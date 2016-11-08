@@ -4,7 +4,6 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 
 import java.io.Serializable;
 
-
 public class User implements Serializable {
 	private String muserName;
 	private String muserNick;
@@ -13,6 +12,7 @@ public class User implements Serializable {
 	private String mavatarSuffix;
 	private Integer mavatarType;
 	private String mavatarLastUpdateTime;
+
 
 	/**
 	 * initial letter for nickname
@@ -28,8 +28,8 @@ public class User implements Serializable {
 	}
 
 	public User(String muserName, String muserNick,
-					  Integer mavatarId, String mavatarPath, String mavatarSuffix, Integer mavatarType,
-					  String mavatarLastUpdateTime) {
+				Integer mavatarId, String mavatarPath, String mavatarSuffix, Integer mavatarType,
+				String mavatarLastUpdateTime) {
 		super();
 		this.muserName = muserName;
 		this.muserNick = muserNick;
@@ -125,7 +125,7 @@ public class User implements Serializable {
 	}
 
 	public String getAvatar() {
-		String path="http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+getMUserName()+"&avatarType=user_avatar&m_avatar_suffix="+getMAvatarSuffix()+"&updatetime="+getMAvatarLastUpdateTime();
+		String path = "http://101.251.196.90:8000/SuperWeChatServerV2.0/downloadAvatar?name_or_hxid="+getMUserName()+"&avatarType=user_avatar&m_avatar_suffix="+getMAvatarSuffix()+"&updatetime="+getMAvatarLastUpdateTime();
 		return path;
 	}
 }

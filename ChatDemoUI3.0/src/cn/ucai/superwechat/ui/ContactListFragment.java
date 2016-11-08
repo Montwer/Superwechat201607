@@ -94,7 +94,7 @@ public class ContactListFragment extends EaseContactListFragment {
             applicationItem.hideUnreadMsgView();
         }
     }
-    
+     
     
     @SuppressWarnings("unchecked")
     @Override

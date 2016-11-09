@@ -1,71 +1,74 @@
- package cn.ucai.superwechat;
- import android.app.Activity;
- import android.content.BroadcastReceiver;
- import android.content.Context;
- import android.content.Intent;
- import android.content.IntentFilter;
- import android.support.v4.content.LocalBroadcastManager;
- import android.util.Log;
- import com.easemob.redpacketui.RedPacketConstant;
- import com.easemob.redpacketui.utils.RedPacketUtil;
- import com.hyphenate.EMCallBack;
- import com.hyphenate.EMConnectionListener;
- import com.hyphenate.EMContactListener;
- import com.hyphenate.EMError;
- import com.hyphenate.EMGroupChangeListener;
- import com.hyphenate.EMMessageListener;
- import com.hyphenate.EMValueCallBack;
- import com.hyphenate.chat.EMClient;
- import com.hyphenate.chat.EMCmdMessageBody;
- import com.hyphenate.chat.EMGroup;
- import com.hyphenate.chat.EMMessage;
- import com.hyphenate.chat.EMMessage.ChatType;
- import com.hyphenate.chat.EMMessage.Status;
- import com.hyphenate.chat.EMMessage.Type;
- import com.hyphenate.chat.EMOptions;
- import com.hyphenate.chat.EMTextMessageBody;
- import com.hyphenate.easeui.controller.EaseUI;
- import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
- import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
- import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
- import com.hyphenate.easeui.domain.EaseEmojicon;
- import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
- import com.hyphenate.easeui.domain.EaseUser;
- import com.hyphenate.easeui.domain.User;
- import com.hyphenate.easeui.model.EaseAtMessageHelper;
- import com.hyphenate.easeui.model.EaseNotifier;
- import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
- import com.hyphenate.easeui.utils.EaseCommonUtils;
- import com.hyphenate.exceptions.HyphenateException;
- import com.hyphenate.util.EMLog;
- import java.util.ArrayList;
- import java.util.HashMap;
- import java.util.Hashtable;
- import java.util.List;
- import java.util.Map;
- import java.util.UUID;
- import cn.ucai.superwechat.bean.Result;
- import cn.ucai.superwechat.data.NetDao;
- import cn.ucai.superwechat.data.OkHttpUtils;
- import cn.ucai.superwechat.db.InviteMessgeDao;
- import cn.ucai.superwechat.db.SuperWeChatHelperDBManager;
- import cn.ucai.superwechat.db.UserDao;
- import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
- import cn.ucai.superwechat.domain.InviteMessage;
- import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
- import cn.ucai.superwechat.domain.RobotUser;
- import cn.ucai.superwechat.parse.UserProfileManager;
- import cn.ucai.superwechat.receiver.CallReceiver;
- import cn.ucai.superwechat.ui.ChatActivity;
- import cn.ucai.superwechat.ui.MainActivity;
- import cn.ucai.superwechat.ui.VideoCallActivity;
- import cn.ucai.superwechat.ui.VoiceCallActivity;
- import cn.ucai.superwechat.utils.L;
- import cn.ucai.superwechat.utils.PreferenceManager;
- import cn.ucai.superwechat.utils.ResultUtils;
+package cn.ucai.superwechat;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+
+import com.easemob.redpacketui.RedPacketConstant;
+import com.easemob.redpacketui.utils.RedPacketUtil;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMContactListener;
+import com.hyphenate.EMError;
+import com.hyphenate.EMGroupChangeListener;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.EMValueCallBack;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMCmdMessageBody;
+import com.hyphenate.chat.EMGroup;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMMessage.ChatType;
+import com.hyphenate.chat.EMMessage.Status;
+import com.hyphenate.chat.EMMessage.Type;
+import com.hyphenate.chat.EMOptions;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.controller.EaseUI.EaseEmojiconInfoProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseSettingsProvider;
+import com.hyphenate.easeui.controller.EaseUI.EaseUserProfileProvider;
+import com.hyphenate.easeui.domain.EaseEmojicon;
+import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.domain.User;
+import com.hyphenate.easeui.model.EaseAtMessageHelper;
+import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.model.EaseNotifier.EaseNotificationInfoProvider;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMLog;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import cn.ucai.superwechat.bean.Result;
+import cn.ucai.superwechat.data.NetDao;
+import cn.ucai.superwechat.data.OkHttpUtils;
+import cn.ucai.superwechat.db.InviteMessgeDao;
+import cn.ucai.superwechat.db.SuperWeChatHelperDBManager;
+import cn.ucai.superwechat.db.UserDao;
+import cn.ucai.superwechat.domain.EmojiconExampleGroupData;
+import cn.ucai.superwechat.domain.InviteMessage;
+import cn.ucai.superwechat.domain.InviteMessage.InviteMesageStatus;
+import cn.ucai.superwechat.domain.RobotUser;
+import cn.ucai.superwechat.parse.UserProfileManager;
+import cn.ucai.superwechat.receiver.CallReceiver;
+import cn.ucai.superwechat.ui.ChatActivity;
+import cn.ucai.superwechat.ui.MainActivity;
+import cn.ucai.superwechat.ui.VideoCallActivity;
+import cn.ucai.superwechat.ui.VoiceCallActivity;
+import cn.ucai.superwechat.utils.L;
+import cn.ucai.superwechat.utils.PreferenceManager;
+import cn.ucai.superwechat.utils.ResultUtils;
+
 public class SuperWeChatHelper {
-
-
     /**
      * data sync listener
      */
@@ -227,7 +230,7 @@ public class SuperWeChatHelper {
             }
         });
 
-        //set options 
+        //set options
         easeUI.setSettingsProvider(new EaseSettingsProvider() {
 
             @Override
@@ -646,13 +649,13 @@ public class SuperWeChatHelper {
         }
 
         @Override
-        public void onContactDeleted(String username) {
+        public void onContactDeleted(final String username) {
             L.e(TAG,"MyContactListener,onContactDeleted...");
             Map<String, EaseUser> localUsers = SuperWeChatHelper.getInstance().getContactList();
             localUsers.remove(username);
             userDao.deleteContact(username);
             inviteMessgeDao.deleteMessage(username);
-
+            SuperWeChatHelper.getInstance().delAppContact(username);
             broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
         }
 
@@ -912,7 +915,7 @@ public class SuperWeChatHelper {
     }
 
     /**
-     * save single contact 
+     * save single contact
      */
     public void saveContact(EaseUser user){
         contactList.put(user.getUsername(), user);
@@ -1349,5 +1352,12 @@ public class SuperWeChatHelper {
         ArrayList<User> mList = new ArrayList<User>();
         mList.addAll(appContactList.values());
         demoModel.saveAppContactList(mList);
+    }
+    /**
+     * save single contact
+     */
+    public void delAppContact(String username){
+        getAppContactList().remove(username);
+        demoModel.delAppContact(username);
     }
 }

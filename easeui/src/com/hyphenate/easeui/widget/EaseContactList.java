@@ -1,8 +1,5 @@
 package com.hyphenate.easeui.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -17,25 +14,29 @@ import android.widget.RelativeLayout;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseContactAdapter;
 import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.domain.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EaseContactList extends RelativeLayout {
     protected static final String TAG = EaseContactList.class.getSimpleName();
-    
+
     protected Context context;
     protected ListView listView;
     protected EaseContactAdapter adapter;
     protected List<EaseUser> contactList;
     protected EaseSidebar sidebar;
-    
+
     protected int primaryColor;
     protected int primarySize;
     protected boolean showSiderBar;
     protected Drawable initialLetterBg;
-    
+
     static final int MSG_UPDATE_LIST = 0;
-    
+
     Handler handler = new Handler() {
-        
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -43,7 +44,7 @@ public class EaseContactList extends RelativeLayout {
                 if(adapter != null){
                 	adapter.clear();
                 	adapter.addAll(new ArrayList<EaseUser>(contactList));
-                	adapter.notifyDataSetChanged();	
+                	adapter.notifyDataSetChanged();
                 }
                 break;
             default:
@@ -55,7 +56,7 @@ public class EaseContactList extends RelativeLayout {
 
     protected int initialLetterColor;
 
-    
+
     public EaseContactList(Context context) {
         super(context);
         init(context, null);
@@ -65,12 +66,12 @@ public class EaseContactList extends RelativeLayout {
         super(context, attrs);
         init(context, attrs);
     }
-    
+
     public EaseContactList(Context context, AttributeSet attrs, int defStyle) {
         this(context, attrs);
     }
 
-    
+
     private void init(Context context, AttributeSet attrs) {
         this.context = context;
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.EaseContactList);
@@ -80,31 +81,31 @@ public class EaseContactList extends RelativeLayout {
         initialLetterBg = ta.getDrawable(R.styleable.EaseContactList_ctsListInitialLetterBg);
         initialLetterColor = ta.getColor(R.styleable.EaseContactList_ctsListInitialLetterColor, 0);
         ta.recycle();
-        
-        
+
+
         LayoutInflater.from(context).inflate(R.layout.ease_widget_contact_list, this);
         listView = (ListView)findViewById(R.id.list);
         sidebar = (EaseSidebar) findViewById(R.id.sidebar);
         if(!showSiderBar)
             sidebar.setVisibility(View.GONE);
     }
-    
+
     /*
      * init view
      */
-    public void init(List<EaseUser> contactList){
+    public void init(List<User> contactList){
     	this.contactList = contactList;
         adapter = new EaseContactAdapter(context, 0, new ArrayList<EaseUser>(contactList));
         adapter.setPrimaryColor(primaryColor).setPrimarySize(primarySize).setInitialLetterBg(initialLetterBg)
             .setInitialLetterColor(initialLetterColor);
         listView.setAdapter(adapter);
-        
+
         if(showSiderBar){
             sidebar.setListView(listView);
         }
     }
-    
-    
+
+
     public void refresh(){
         Message msg = handler.obtainMessage(MSG_UPDATE_LIST);
         handler.sendMessage(msg);
@@ -113,11 +114,11 @@ public class EaseContactList extends RelativeLayout {
     public void filter(CharSequence str) {
         adapter.getFilter().filter(str);
     }
-    
+
     public ListView getListView(){
         return listView;
     }
-    
+
     public void setShowSiderBar(boolean showSiderBar){
         if(showSiderBar){
             sidebar.setVisibility(View.VISIBLE);

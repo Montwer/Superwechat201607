@@ -62,22 +62,24 @@ public class MFGT {
         startActivity(context, AddContactActivity.class);
     }
 
-
     public static void gotoFriendProfile(Activity context, User user){
         Intent intent = new Intent();
         intent.setClass(context,FriendProfileActivity.class);
         intent.putExtra(I.User.USER_NAME,user);
         startActivity(context, intent);
     }
+
     public static void gotoAddFirendMsg(Activity context,String username){
         Intent intent = new Intent();
         intent.setClass(context,AddFriendActivity.class);
         intent.putExtra(I.User.USER_NAME,username);
         startActivity(context, intent);
     }
+
     public static void gotoNewFriendsMsg(Activity context){
         startActivity(context, NewFriendsMsgActivity.class);
     }
+
     public static void gotoChat(Activity context,String username){
         Intent intent = new Intent();
         intent.setClass(context,ChatActivity.class);

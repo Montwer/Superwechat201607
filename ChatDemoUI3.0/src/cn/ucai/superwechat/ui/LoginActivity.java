@@ -128,8 +128,8 @@ public class LoginActivity extends BaseActivity {
             Toast.makeText(this, R.string.network_isnot_available, Toast.LENGTH_SHORT).show();
             return;
         }
-         currentUsername = mEtUsername.getText().toString().trim();
-          currentPassword = mEtPassword.getText().toString().trim();
+        currentUsername = mEtUsername.getText().toString().trim();
+        currentPassword = mEtPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(currentUsername)) {
             Toast.makeText(this, R.string.User_name_cannot_be_empty, Toast.LENGTH_SHORT).show();
@@ -209,19 +209,19 @@ public class LoginActivity extends BaseActivity {
 
                 L.e(TAG,"s="+s);
                 if (s!=null&&s!=""){
-                   Result result= ResultUtils.getResultFromJson(s, User.class);
-                      if (result!=null&&result.isRetMsg()){
-                         User user= (User) result.getRetData();
-                          if (user!=null) {
-                              UserDao dao = new UserDao(mContext);
-                              dao.saveUser(user);
-                              SuperWeChatHelper.getInstance().saveAppContact(user);
-                              loginSucess();
-                          }
-                      }else {
-                          pd.dismiss();
-                          L.e(TAG,"login fail."+result);
-                      }
+                    Result result= ResultUtils.getResultFromJson(s, User.class);
+                    if (result!=null&&result.isRetMsg()){
+                        User user= (User) result.getRetData();
+                        if (user!=null) {
+                            UserDao dao = new UserDao(mContext);
+                            dao.saveAppContact(user);
+                            SuperWeChatHelper.getInstance().saveAppContact(user);
+                            loginSucess();
+                        }
+                    }else {
+                        pd.dismiss();
+                        L.e(TAG,"login fail."+result);
+                    }
                 }else {
                     pd.dismiss();
                 }

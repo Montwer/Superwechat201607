@@ -28,7 +28,7 @@ public class UserDao {
 	public static final String COLUMN_NAME_ID = "username";
 	public static final String COLUMN_NAME_NICK = "nick";
 	public static final String COLUMN_NAME_AVATAR = "avatar";
-	
+
 	public static final String PREF_TABLE_NAME = "pref";
 	public static final String COLUMN_NAME_DISABLED_GROUPS = "disabled_groups";
 	public static final String COLUMN_NAME_DISABLED_IDS = "disabled_ids";
@@ -37,7 +37,6 @@ public class UserDao {
 	public static final String ROBOT_COLUMN_NAME_ID = "username";
 	public static final String ROBOT_COLUMN_NAME_NICK = "nick";
 	public static final String ROBOT_COLUMN_NAME_AVATAR = "avatar";
-
 
 	public static final String USER_TABLE_NAME = "t_superwechat_user";
 	public static final String USER_COLUMN_NAME = "m_user_name";
@@ -49,89 +48,86 @@ public class UserDao {
 	public static final String USER_COLUMN_AVATAR_LASTUPDATE_TIME = "m_user_avatar_lastupdate_time";
 
 
-
 	public UserDao(Context context) {
 	}
 
 	/**
 	 * save contact list
-	 * 
+	 *
 	 * @param contactList
 	 */
 	public void saveContactList(List<EaseUser> contactList) {
-	    SuperWeChatHelperDBManager.getInstance().saveContactList(contactList);
+		SuperWeChatHelperDBManager.getInstance().saveContactList(contactList);
 	}
 
 	/**
 	 * get contact list
-	 * 
+	 *
 	 * @return
 	 */
 	public Map<String, EaseUser> getContactList() {
-		
-	    return SuperWeChatHelperDBManager.getInstance().getContactList();
+
+		return SuperWeChatHelperDBManager.getInstance().getContactList();
 	}
-	
+
 	/**
 	 * delete a contact
 	 * @param username
 	 */
 	public void deleteContact(String username){
-	    SuperWeChatHelperDBManager.getInstance().deleteContact(username);
+		SuperWeChatHelperDBManager.getInstance().deleteContact(username);
 	}
-	
+
 	/**
 	 * save a contact
 	 * @param user
 	 */
 	public void saveContact(EaseUser user){
-	    SuperWeChatHelperDBManager.getInstance().saveContact(user);
+		SuperWeChatHelperDBManager.getInstance().saveContact(user);
 	}
-	
+
 	public void setDisabledGroups(List<String> groups){
-	    SuperWeChatHelperDBManager.getInstance().setDisabledGroups(groups);
-    }
-    
-    public List<String>  getDisabledGroups(){       
-        return SuperWeChatHelperDBManager.getInstance().getDisabledGroups();
-    }
-    
-    public void setDisabledIds(List<String> ids){
-        SuperWeChatHelperDBManager.getInstance().setDisabledIds(ids);
-    }
-    
-    public List<String> getDisabledIds(){
-        return SuperWeChatHelperDBManager.getInstance().getDisabledIds();
-    }
-    
-    public Map<String, RobotUser> getRobotUser(){
-    	return SuperWeChatHelperDBManager.getInstance().getRobotList();
-    }
-    
-    public void saveRobotUser(List<RobotUser> robotList){
-    	SuperWeChatHelperDBManager.getInstance().saveRobotList(robotList);
-    }
-	public boolean saveUser(User user){
-		return SuperWeChatHelperDBManager.getInstance().saveUser(user);
+		SuperWeChatHelperDBManager.getInstance().setDisabledGroups(groups);
 	}
 
-	public User getUser(String username){
-		return SuperWeChatHelperDBManager.getInstance().getUser(username);
+	public List<String>  getDisabledGroups(){
+		return SuperWeChatHelperDBManager.getInstance().getDisabledGroups();
 	}
 
-	public boolean updateUser(User user){
-		return SuperWeChatHelperDBManager.getInstance().updateUser(user);
+	public void setDisabledIds(List<String> ids){
+		SuperWeChatHelperDBManager.getInstance().setDisabledIds(ids);
+	}
+
+	public List<String> getDisabledIds(){
+		return SuperWeChatHelperDBManager.getInstance().getDisabledIds();
+	}
+
+	public Map<String, RobotUser> getRobotUser(){
+		return SuperWeChatHelperDBManager.getInstance().getRobotList();
+	}
+
+	public void saveRobotUser(List<RobotUser> robotList){
+		SuperWeChatHelperDBManager.getInstance().saveRobotList(robotList);
 	}
 
 	public void saveAppContact(User user){
 		SuperWeChatHelperDBManager.getInstance().saveAppContact(user);
 	}
 
+
 	public Map<String, User> getAppContactList() {
 
 		return SuperWeChatHelperDBManager.getInstance().getAppContactList();
 	}
+
 	public void saveAppContactList(List<User> contactList) {
 		SuperWeChatHelperDBManager.getInstance().saveAppContactList(contactList);
+	}
+	/**
+	 * delete a contact
+	 * @param username
+	 */
+	 public void deleteAppContact(String username){
+		 SuperWeChatHelperDBManager.getInstance().deleteAppContact(username);
 	}
 }

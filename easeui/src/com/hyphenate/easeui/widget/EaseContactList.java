@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseContactAdapter;
-import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.domain.User;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class EaseContactList extends RelativeLayout {
     protected Context context;
     protected ListView listView;
     protected EaseContactAdapter adapter;
-    protected List<EaseUser> contactList;
+    protected List<User> contactList;
     protected EaseSidebar sidebar;
 
     protected int primaryColor;
@@ -40,15 +39,15 @@ public class EaseContactList extends RelativeLayout {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-            case MSG_UPDATE_LIST:
-                if(adapter != null){
-                	adapter.clear();
-                	adapter.addAll(new ArrayList<EaseUser>(contactList));
-                	adapter.notifyDataSetChanged();
-                }
-                break;
-            default:
-                break;
+                case MSG_UPDATE_LIST:
+                    if(adapter != null){
+                        adapter.clear();
+                        adapter.addAll(new ArrayList<User>(contactList));
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+                default:
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -94,10 +93,10 @@ public class EaseContactList extends RelativeLayout {
      * init view
      */
     public void init(List<User> contactList){
-    	this.contactList = contactList;
-        adapter = new EaseContactAdapter(context, 0, new ArrayList<EaseUser>(contactList));
+        this.contactList = contactList;
+        adapter = new EaseContactAdapter(context, 0, new ArrayList<User>(contactList));
         adapter.setPrimaryColor(primaryColor).setPrimarySize(primarySize).setInitialLetterBg(initialLetterBg)
-            .setInitialLetterColor(initialLetterColor);
+                .setInitialLetterColor(initialLetterColor);
         listView.setAdapter(adapter);
 
         if(showSiderBar){

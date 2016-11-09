@@ -67,7 +67,7 @@ public class PickContactNoCheckboxActivity extends BaseActivity {
 
 	protected void onListItemClick(int position) {
 		setResult(RESULT_OK, new Intent().putExtra("username", contactAdapter.getItem(position)
-				.getUsername()));
+				.getMUserName()));
 		finish();
 	}
 

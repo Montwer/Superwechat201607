@@ -124,7 +124,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 		List<String> members = new ArrayList<String>();
 		int length = contactAdapter.isCheckedArray.length;
 		for (int i = 0; i < length; i++) {
-			String username = contactAdapter.getItem(i).getUsername();
+			String username = contactAdapter.getItem(i).getMUserName();
 			if (contactAdapter.isCheckedArray[i] && !existMembers.contains(username)) {
 				members.add(username);
 			}
@@ -149,7 +149,7 @@ public class GroupPickContactsActivity extends BaseActivity {
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View view = super.getView(position, convertView, parent);
 
-			final String username = getItem(position).getUsername();
+			final String username = getItem(position).getMUserName();
 
 			final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
 			ImageView avatarView = (ImageView) view.findViewById(R.id.avatar);
